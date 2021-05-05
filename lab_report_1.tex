@@ -71,15 +71,6 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 %----------------------------------------------------------------------------------------
 \section{TITLE 2}
 
-Base64 Decoding:
-base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
-cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
-
-base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy | hexdump -c
-0000000  \0   c   n   _   0   6   @   e   x   1   .   c   n   2   l   a
-0000010   b   .   c   n   .   t   u   w   i   e   n   .   a   c   .   a
-0000020   t  \0   P   e   g   u   q   o   t   a   s   e   2            
-000002d
 
 
 
@@ -124,12 +115,15 @@ As can be seen in \cref{tab:routing}, tables can also be useful.
 You can add graphics with the code example in \cref{lst:figure}. The result can be seen in \cref{fig:lorem}.
 
 \begin{lstlisting}[language=tex, frame=single, caption={Code for adding a picture}, label=lst:figure, float, floatplacement=h]
-\begin{figure}[ht]
- \centering
- \includegraphics[height=6cm]{images/loremipsum.png}
- \caption{Descriptive text.} 
- \label{fig:lorem}
-\end{figure} 
+Base64 Decoding:
+base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
+cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
+
+base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy | hexdump -c
+0000000  \0   c   n   _   0   6   @   e   x   1   .   c   n   2   l   a
+0000010   b   .   c   n   .   t   u   w   i   e   n   .   a   c   .   a
+0000020   t  \0   P   e   g   u   q   o   t   a   s   e   2            
+000002d
 \end{lstlisting}
 
 Hint: if you add references to items,
