@@ -54,7 +54,7 @@
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
-\section{Task and Protocol Description}
+\section{Task and Protocol Description} \label{sec:task}
 
 Hab was geändert!
 
@@ -64,12 +64,18 @@ RFC3501 - IMAP
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
-\section{Method(Procedure?)}
+\section{Procedure} \label{sec:procedure}
 This section describes the different steps that are needed to recover the forgotten email password from the network traffic between the email client and the email server. 
-\subsection{Traffic capture with WireShark}
-First all incoming and outgoing traffic needs to be captured by using WireShark. To reduce the number of captured packets the capture filter "\verb|not port 22|" was used because this prevents the SSH traffic from being captured as well. To get the IMAP or POP authentication message Thunderbird was launched right after the capturing process was started, which was terminated again after about 20 seconds. Scrolling through the capture showed quickly that IMAP was used to check for new messages and not POP.
-\subsection{Filter captured traffic}
-In order to show only the required IMAP messages the display filter "\verb|imap|" was used. A screen shot of WireShark with this filter applied can be seen in \cref{fig:ws}. 
+\subsection{Traffic capture with WireShark} \label{subsec:capture}
+First all incoming and outgoing traffic needs to be captured by using WireShark. 
+To reduce the number of captured packets the capture filter "\verb|not port 22|" was used because this prevents the SSH traffic from being captured as well. 
+To get the IMAP authentication message Thunderbird was launched right after the capturing process was started, which was then terminated again after about 20 seconds.
+\subsection{Filter captured traffic} \label{subsec:filter}
+In order to show only the required IMAP messages the display filter "\verb|imap|" was used. 
+Before that, the filter "\verb|pop|" was applied to exclude the usage of the Post Office Protocol for mail query. 
+A screen shot of WireShark with the IMAP filter applied can be seen in \cref{fig:ws}. 
+To see the whole traffic between the mail server and the client and not just the IMAP traffic, the source IP address of the first IMAP respose message was used as filter (\verb|ipv6.addr == 2001:629:2600:a018::1|).
+This was not mandatory to retrieve the password but helped to understand the initial connection establishment.  
 
 \begin{figure}[!ht]
 	\centering % centering figure 
@@ -78,40 +84,28 @@ In order to show only the required IMAP messages the display filter "\verb|imap|
 	\label{fig:ws} % labeling to refer it inside the text
 \end{figure} 
 
-\subsection{Decode messages and find password}
-
-Base64 Decoding:
+\subsection{Decode messages and find password} \label{subsec:decode}
+As already explained in \cref{sec:task} the client requests to authenticate with plane text and sends its credentials in the fourth exchanged IMAP message to the server. 
+Because the credentials are encoded in base46, it is necessary to decode the message string by using the following shell command in the terminal:
 \begin{verbatim}
-base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
-cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
-
-base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy | hexdump -c
-0000000  \0   c   n   _   0   6   @   e   x   1   .   c   n   2   l   a
-0000010   b   .   c   n   .   t   u   w   i   e   n   .   a   c   .   a
-0000020   t  \0   P   e   g   u   q   o   t   a   s   e   2            
-000002d
+$ base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
+$ cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
 \end{verbatim}
-
-
-
-As can be seen in \cref{tab:routing}, tables can also be useful.
+In the returned string it is easy to identify the email address followed by the password which is in our case \verb|Peguqotase2|. 
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
 \section{Conclusion}
 
-This shows how easy it is for attackers to retrieve passwords from plain text email traffic. Therefore, it is very important to make sure that all connections to the email server are TLS/SSL encrypted. With IMAP this can be done explicitly over port 143, by using STARTTLS, or implicitly over port 993 which enforces a encrypted connection.
+This shows how easy it is for attackers to retrieve passwords from plain text email traffic. Therefore, it is very important to make sure that all connections to the email server are TLS/SSL encrypted. With IMAP this can be done explicitly over port 143, by using the STARTTLS command, or implicitly over port 993 which enforces a encrypted connection.
 
-\begin{figure}[ht]
- \centering % centering figure 
- \includegraphics[height=6cm]{images/loremipsum.png} % importing figure
- \caption{Don't forget to find a fitting caption for your graphics.} 
- \label{fig:lorem} % labeling to refer it inside the text
-\end{figure} 
 
 %----------------------------------------------------------------------------------------
 %	SECTION X
 %---------------------------------------------------------------------------------------
+
+
+\section{Stuff}
 
 \begin{table}[hb]
 	\centering
@@ -130,11 +124,9 @@ This shows how easy it is for attackers to retrieve passwords from plain text em
 		\bottomrule
 	\end{tabular}
 \end{table}
+
 With vspace, you can add vertical empty space for formatting purposes (which should only be used as a last resort):
 \vspace*{1cm}
-
-The following text is now shifted vertically for one centimeter
-
 \begin{itemize}
 	\item Please use the \textit{itemize} environment for better and clear representation of
 	\item your results
@@ -144,8 +136,6 @@ The following text is now shifted vertically for one centimeter
 	\item Also you can use the \textit{enumerate} environment for 
 	\item representing the sub-example
 \end{enumerate}
-
-
 
 
 
