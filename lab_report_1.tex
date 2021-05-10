@@ -13,6 +13,8 @@
 \usepackage{booktabs} % nicer tables
 \usepackage[noabbrev]{cleveref} % automatic references
 \usepackage{listings} % typeset code
+\usepackage[backend=biber]{biblatex}
+\addbibresource{referenzen.bib}
 
 \crefname{lstlisting}{listing}{listings} % for referencing code
 \Crefname{lstlisting}{Listing}{Listings} % for referencing code
@@ -56,10 +58,15 @@
 %----------------------------------------------------------------------------------------
 \section{Task and Protocol Description} \label{sec:task}
 
-Hab was geändert!
+The subject of the first task is to observe email client’s network traffic and to extract the username and password from the client.  Furthermore this assignment offers some reflections on the security aspects of protocols using plaintext on network traffic.
 
-RFC3501 - IMAP
+\subsection{Internet Message Access Protocol}
+The IMAP protocol is used by email clients to retrieve email messages from a mail server over a TCP connection. The protocol has been defined in the RFC 3501. Usually an IMAP server typically listens on port number 143, like our first task did. The more secure way is to run IMAP over SSL/TLS, which is assigned the port number 993.
 
+\subsubsection{Authentication}
+As this report will show, the IMAP protocol contains an authentication message, which leaks the vulnerability. The user must authenticate himself before he can gain access to mail. This is done by logging in with his username and password. The password is transmitted in plain text at the IMAP protocol level. Mail servers can therefore forbid clients from transmitting the password if no encrypted session has been established beforehand.\\
+
+Furthermore IMAP has an extension for \textbf{PLAIN Simple Authentication and Security Layer (SASL)}\cite{zeilenga2006plain} which was designed to have a wider interoperability with other systems. The main drawback is shown in the first assignment, capturing the username and password of the client.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
@@ -137,7 +144,11 @@ With vspace, you can add vertical empty space for formatting purposes (which sho
 	\item representing the sub-example
 \end{enumerate}
 
+<<<<<<< HEAD
 
 
+=======
+\printbibliography
+>>>>>>> 2a923194b061aeb4ca0c046ee1cd06470c8b1d22
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
