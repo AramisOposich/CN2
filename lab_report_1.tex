@@ -86,7 +86,7 @@ This was not mandatory to retrieve the password but helped to understand the ini
 
 \subsection{Decode messages and find password} \label{subsec:decode}
 As already explained in \cref{sec:task} the client requests to authenticate with plane text and sends its credentials in the fourth exchanged IMAP message to the server. 
-Because the credentials are encoded in base46, it is necessary to decode the message string by using the following shell command in the terminal:
+Because the credentials are encoded in UTF-8, it is necessary to decode the message string by using the following shell command in the terminal:
 \begin{verbatim}
 $ base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
 $ cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
