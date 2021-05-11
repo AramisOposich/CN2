@@ -91,7 +91,7 @@ This was not mandatory to retrieve the password but helped to understand the ini
 	\label{fig:ws} % labeling to refer it inside the text
 \end{figure} 
 
-\subsection{Decode messages and find password} \label{subsec:decode}
+\subsection{Decoding the messages and find password} \label{subsec:decode}
 As already explained in \cref{sec:task} the client requests to authenticate with plane text and sends its credentials in the fourth exchanged IMAP message to the server. 
 Because the credentials are encoded in UTF-8, it is necessary to decode the message string by using the following shell command in the terminal:
 \begin{verbatim}
@@ -99,6 +99,7 @@ $ base64 -di <<<AGNuXzA2QGV4MS5jbjJsYWIuY24udHV3aWVuLmFjLmF0AFBlZ3Vxb3Rhc2Uy
 $ cn_06@ex1.cn2lab.cn.tuwien.ac.atPeguqotase2
 \end{verbatim}
 In the returned string it is easy to identify the email address followed by the password which is in our case \verb|Peguqotase2|. 
+
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
@@ -107,48 +108,8 @@ In the returned string it is easy to identify the email address followed by the 
 This shows how easy it is for attackers to retrieve passwords from plain text email traffic. Therefore, it is very important to make sure that all connections to the email server are TLS/SSL encrypted. With IMAP this can be done explicitly over port 143, by using the STARTTLS command, or implicitly over port 993 which enforces a encrypted connection.
 
 
-%----------------------------------------------------------------------------------------
-%	SECTION X
-%---------------------------------------------------------------------------------------
 
-
-\section{Stuff}
-
-\begin{table}[hb]
-	\centering
-	\caption{Routing table for network A}
-	\label{tab:routing}
-	\begin{tabular}{lll}
-		\toprule
-		\textbf{router} & \textbf{destination} & \textbf{via}  \\ \midrule
-		r1 & 10.1.2.0/24 & 10.3.2.1 \\
-		r1 & 10.2.1.0/24 & 10.3.2.1 \\
-		r1 & 10.5.3.0/24 & 10.0.2.1 \\
-		\midrule
-		r2 & 10.0.3.0/24 & 10.5.2.1 \\
-		\midrule
-		r3 & 10.3.0.0/24 & 10.3.4.1 \\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-With vspace, you can add vertical empty space for formatting purposes (which should only be used as a last resort):
-\vspace*{1cm}
-\begin{itemize}
-	\item Please use the \textit{itemize} environment for better and clear representation of
-	\item your results
-\end{itemize}
-
-\begin{enumerate}
-	\item Also you can use the \textit{enumerate} environment for 
-	\item representing the sub-example
-\end{enumerate}
-
-<<<<<<< HEAD
-
-
-=======
 \printbibliography
->>>>>>> 2a923194b061aeb4ca0c046ee1cd06470c8b1d22
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
