@@ -66,7 +66,7 @@ It uses plain text to transfer messages and has no build in encryption, therefor
 
 
 \subsubsection{Authentication}
-As this report will show, the IMAP protocol contains an authentication message, which leaks the vulnerability. 
+As this report will show, the IMAP protocol contains an authentication message which exploits this vulnerability. 
 The user must authenticate himself before he can gain access to the mail server. 
 This can be done over different ways, which are described in RFC 4422.
 
@@ -86,8 +86,8 @@ To get the IMAP authentication message Thunderbird was launched right after the 
 \subsection{Filter captured traffic} \label{subsec:filter}
 In order to show only the required IMAP messages the display filter "\verb|imap|" was used. 
 Before that, the filter "\verb|pop|" was applied to exclude the usage of the Post Office Protocol for mail query. 
-A screen shot of WireShark with the IMAP filter applied can be seen in \cref{fig:ws}. 
-To see the whole traffic between the mail server and the client and not just the IMAP traffic, the source IP address of the first IMAP respose message was used as filter (\verb|ipv6.addr == 2001:629:2600:a018::1|).
+A screenshot of WireShark with the IMAP filter applied can be seen in \cref{fig:ws}. 
+To see the whole traffic between the mail server and the client and not just the IMAP traffic, the source IP address of the first IMAP response message was used as filter (\verb|ipv6.addr == 2001:629:2600:a018::1|).
 This was not mandatory to retrieve the password but helped to understand the initial connection establishment.  
 
 \begin{figure}[!ht]
@@ -97,7 +97,7 @@ This was not mandatory to retrieve the password but helped to understand the ini
 	\label{fig:ws} % labeling to refer it inside the text
 \end{figure} 
 
-\subsection{Decoding the messages and find password} \label{subsec:decode}
+\subsection{Decoding the messages and find the password} \label{subsec:decode}
 As already explained in \cref{sec:task} the client requests to authenticate with plane text and sends its credentials in the fourth exchanged IMAP message to the server. 
 Because the credentials are encoded in UTF-8, it is necessary to decode the message string by using the following shell command in the terminal:
 \begin{verbatim}
@@ -111,7 +111,7 @@ In the returned string it is easy to identify the email address followed by the 
 %----------------------------------------------------------------------------------------
 \section{Conclusion}
 
-This shows how easy it is for attackers to retrieve passwords from plain text email traffic. Therefore, it is very important to make sure that all connections to the email server are TLS/SSL encrypted. With IMAP this can be done explicitly over port 143, by using the STARTTLS command, or implicitly over port 993 which enforces a encrypted connection.
+This shows how easy it is for attackers to retrieve passwords from plain text email traffic which uses the PLAIN authentication method. Therefore, it is very important to make sure that all connections to the email server are TLS/SSL encrypted. With IMAP this can be done explicitly over port 143, by using the STARTTLS command, or implicitly over port 993 which enforces an encrypted connection.
 
 
 
