@@ -56,8 +56,13 @@
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
-\section{Task and Protocol Description} \label{sec:task}
-Aufgaben, kurz SIP und SDP, RTP, kurz codecs, (kurz MOS und ACR/DCR)
+\section{Task description} \label{sec:task}
+The task of this assignment is to set up a Voice over IP (VoIP) Client and compare the influence of multimedia codecs on the Quality of Service (QoS) of video calls.
+Furthermore, the signaling messages of the Session Initiation Protocol (SIP) shall be analyzed to verify the correct behavior and to find a secret message of the registrar.
+
+The comparison of the QoS is to be done once subjectively and once on the basis of self-selected network parameters, which are also to be visualized graphically. 
+
+
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
@@ -67,9 +72,38 @@ Aufgaben, kurz SIP und SDP, RTP, kurz codecs, (kurz MOS und ACR/DCR)
 - welche zugangsdaten ... 
 
 - Signaling (Sequenzdiagramm) des Registrierungsvorgangs + Secret message 
-\subsection{Capturing process and SIP signaling} \label{subsec:capture}
-- Wie sind wir vorgegangen um alle unterschiedlichen Codecs zu capturen... (+cn2\_sbs\_capture  tool)
+\subsection{Capturing process} \label{subsec:capture}
+This year because of the COVID-19 pandemic it was only possible to access the lab PCs remotely.
+This is most of the time no problem but to compare the video and audio quality of SIP calls it is important to have direct access, because the VNC connection influences the subjective impressions.
+To overcome this problem a command line tool called \verb|cn2_sbs_capture| has been provided, which captures the incoming audio and video and the outgoing video.
+Because the camera and microphone of the lab PC could not be used the same video was played each call.
 
+To capture a call, the selected codecs were first set in the Linphone settings. 
+Then \verb|cn2_sbs_capture| was executed with the default settings and the Wireshark capture was started. 
+After that a one-minute-long call was made. 
+Table \ref{tab:capture} shows all captured calls and the chosen codecs.
+
+\begin{table}[hb]
+	\centering
+	\caption{Captured calls}
+	\label{tab:capture}
+	\begin{tabular}{l|l|l|l}
+		\toprule
+		\textbf{No.} & \textbf{connection type} & \textbf{video codec} & \textbf{audio codec}  \\ \midrule
+		1 & landline & VP8 & OPUS\\
+		2 & satellite & VP8 & OPUS\\
+		3 & landline & MP4V\_ES & speex 16 kbit\\
+		4 & satellite & MP4V\_ES & speex16 kbit\\
+		5 & landline & MP4V\_ES & PCMU\\
+		6 & satellite & MP4V\_ES & PCMU\\
+		7 & satellite & H.263-1998\_ES & GSM\\
+		8 & satellite & H.263 & speex 8 kbit\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+- Wie sind wir vorgegangen um alle unterschiedlichen Codecs zu capturen... (+cn2\_sbs\_capture  tool)
+\subsection{SIP signaling and SDP} \label{subsec:signaling}
 
 - SIP Signaling mit Sequenzdiagramm beschreiben "verify that both, signaling and media work correctly."
 
