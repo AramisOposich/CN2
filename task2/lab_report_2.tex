@@ -69,9 +69,21 @@ The comparison of the QoS is to be done once subjectively and once on the basis 
 \section{Procedure} \label{sec:procedure}
 
 \subsection{Linphone setup and SIP registration} \label{subsec:setup}
-- welche zugangsdaten ... 
+(- welche zugangsdaten ... 
+- Signaling (Sequenzdiagramm) des Registrierungsvorgangs + Secret message)
 
-- Signaling (Sequenzdiagramm) des Registrierungsvorgangs + Secret message 
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[height=6cm]{images/sip_flowseq.png} % importing figure
+	\caption{Captured IMAP traffic} 
+	\label{fig:ws} % labeling to refer it inside the text
+\end{figure} 
+
+%Von letzten SIP Register haben wir die secret message bekommen!
+%1.) SIP REQUEST: Digest realm="cn2lab.cn.tuwien.ac.at", nonce="YJpM2mCaS64RWAT+53QLYY40A29xCJ3l", username="cn_06",  %uri="sip:cn2lab.cn.tuwien.ac.at", response="aa76de94237e27cb05b0091b89a01628"
+
+%2.) STATUS 200 OK: Secret-Message: Dazecixaru4
+
 \subsection{Capturing process} \label{subsec:capture}
 This year because of the COVID-19 pandemic it was only possible to access the lab PCs remotely.
 This is most of the time no problem but to compare the video and audio quality of SIP calls it is important to have direct access, because the VNC connection influences the subjective impressions.
