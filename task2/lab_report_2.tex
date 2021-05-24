@@ -69,20 +69,26 @@ The comparison of the QoS is to be done once subjectively and once on the basis 
 \section{Procedure} \label{sec:procedure}
 
 \subsection{Linphone setup and SIP registration} \label{subsec:setup}
-(- welche zugangsdaten ... 
-- Signaling (Sequenzdiagramm) des Registrierungsvorgangs + Secret message)
+Before a VoIP call can be done, one of the first thing is to do a SIP registration. SIP Endpoints are identified by their Address of Record, for example "sip:cn\_06@cn2lab.cn.tuwien.at".
+
+The endpoint is also defined by the location, which is identified by an IP address, port number and protocol. To receive calls, the caller needs to know the location of the callee. Since most SIP endpoints do not have a permanent, fixed, publicly-reachable IP address, they will need to register with a central server, or Registrar, so that they can receive incoming calls. This server accepts REGISTER requests and places the information it receives in those requests into the location service for the domain it handles. In figure \labelcref{fig:SIP Registrar}
 
 \begin{figure}[!ht]
 	\centering % centering figure 
 	\includegraphics[height=6cm]{images/sip_flowseq.png} % importing figure
-	\caption{Captured IMAP traffic} 
-	\label{fig:ws} % labeling to refer it inside the text
+	\caption{SIP registration flow} 
+	\label{fig:SIP Registrar} % labeling to refer it inside the text
 \end{figure} 
 
-%Von letzten SIP Register haben wir die secret message bekommen!
-%1.) SIP REQUEST: Digest realm="cn2lab.cn.tuwien.ac.at", nonce="YJpM2mCaS64RWAT+53QLYY40A29xCJ3l", username="cn_06",  %uri="sip:cn2lab.cn.tuwien.ac.at", response="aa76de94237e27cb05b0091b89a01628"
+The first sequence is the initial registration request from SIP User Agent with it's address information. The SIP registrar answers with the information about the login "401 Unauthorized". To be authenticate, the client will combine a received nonce with his user and password information and create an MD5 hash out of them. A successful login is omitted with a 200 OK.
 
-%2.) STATUS 200 OK: Secret-Message: Dazecixaru4
+\subsubsection{secret message}
+One of the task was to extract a secret message from the registration process. The secret message can be found in the last step of the registrar.
+
+\begin{itemize}
+	\item SIP REQUEST: Digest realm="cn2lab.cn.tuwien.ac.at", nonce="YJpM2mCaS64RWAT+53QLYY40A29xCJ3l", username="cn\_06",  uri="sip:cn2lab.cn.tuwien.ac.at", response="aa76de94237e27cb05b0091b89a01628"
+	\item STATUS 200 OK: Secret-Message: Dazecixaru4
+\end{itemize}
 
 \subsection{Capturing process} \label{subsec:capture}
 This year because of the COVID-19 pandemic it was only possible to access the lab PCs remotely.
