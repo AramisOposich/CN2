@@ -21,7 +21,7 @@
 
 \usepackage[headsepline]{scrlayer-scrpage} % header
 \ohead{Group 06} % right part of header
-\ihead{Assignment 1} % left part of header
+\ihead{Assignment 2} % left part of header
 
 \lstset{basicstyle=\ttfamily} % monospaced font in listing
 
@@ -138,9 +138,10 @@ A deeper look in the SDP section in the body of the third message in the flow co
 	\label{fig:sigFlow} % labeling to refer it inside the text
 \end{figure} 
 In some calls, especially in the satellite calls, retransmissions of signaling messages could be identified in the auto generated sequence diagram. 
-Another unexpected behavior which can be seen in \cref{fig:sigFlow} is the order of the \verb|ACK| message and the initial OPUS RTP stream message. 
+A unexpected behavior which can be seen in \cref{fig:sigFlow} is the order of the \verb|ACK| message and the initial OPUS RTP stream message. 
 Actually, the \verb|ACK| is sent directly after a \verb|200 OK| of the offer and answer process but here the OPUS RTP stream starts before the acknowledgment.
 This behavior could be seen in most of the other captures as well, but it has no influence on the functionality because the callee already accepted the offered codecs.
+
 
 \subsection{Audio codec quality comparison} \label{subsec:audio}
 - Audio codecs subjektiv  vergleichen (vielleicht nach der Mean Opinion Score)
