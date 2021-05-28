@@ -103,21 +103,22 @@ Table \ref{tab:capture} shows all captured calls and the chosen codecs.
 
 \begin{table}[hb]
 	\centering
-	\caption{Captured calls}
-	\label{tab:capture}
-	\begin{tabular}{l|l|l|l}
-		\toprule
-		\textbf{No.} & \textbf{connection type} & \textbf{video codec} & \textbf{audio codec}  \\ \midrule
-		1 & landline & VP8 & OPUS\\
-		2 & satellite & VP8 & OPUS\\
-		3 & landline & MP4V\_ES & speex 16 kHz\\
-		4 & satellite & MP4V\_ES & speex 16 kHz\\
-		5 & landline & MP4V\_ES & PCMU\\
-		6 & satellite & MP4V\_ES & PCMU\\
-		7 & satellite & H.263-1998\_ES & GSM\\
-		8 & satellite & H.263 & speex 8 kHz\\
-		\bottomrule
+	\begin{tabular}{|l|l|l|l|l|l|p{0.2\textwidth}|}
+		\hline
+		\textbf{No.} & \textbf{type} & \textbf{v. codec} &\textbf{v. score} & \textbf{a. codec} & \textbf{a. score} & \textbf{comment} \\ 
+		\hline
+		1 & landline & VP8 & & OPUS &&- \\
+		2 & satellite & VP8 & &  OPUS &&no fluent video just single frames every view seconds\\
+		3 & landline & MP4V\_ES && speex 16 kHz &&\\
+		4 & satellite & MP4V\_ES && speex 16 kHz && artifacts... \\
+		5 & landline & MP4V\_ES && PCMU &&\\
+		6 & satellite & MP4V\_ES && PCMU &&\\
+		7 & satellite & H.263-1998 && GSM&&\\
+		8 & satellite & H.263 && speex 8 kHz&&\\
+		\hline
 	\end{tabular}
+	\caption{Captured calls (audio $\rightarrow$ a., video $\rightarrow$ v.)}
+	\label{tab:capture}
 \end{table}
 
 Because capturing all combinations of audio and video codecs would take too much time a selection of codecs was tested independent of each other.
@@ -140,22 +141,18 @@ A deeper look in the SDP section in the body of the third message in the flow co
 In some calls, especially in the satellite calls, retransmissions of signaling messages could be identified in the auto generated sequence diagram. 
 A unexpected behavior which can be seen in \cref{fig:sigFlow} is the order of the \verb|ACK| message and the initial OPUS RTP stream message. 
 Actually, the \verb|ACK| is sent directly after a \verb|200 OK| of the offer and answer process but here the OPUS RTP stream starts before the acknowledgment.
-This behavior could be seen in most of the other captures as well, but it has no influence on the functionality because the callee already accepted the offered codecs.
+This behavior could be seen in most of the other captures as well, but it has no influence on the functionality because the callee already accepted the offered codecs and the \verb|ACK| message is an own transaction and is not bound to the previous messages.
 
 
-\subsection{Audio codec quality comparison} \label{subsec:audio}
-- Audio codecs subjektiv  vergleichen (vielleicht nach der Mean Opinion Score)
+\subsection{Audio and video codec quality comparison} \label{subsec:audio}
+For the subjective quality measurement of the audio and video experience of different codecs the rating system of the Mean Opinion Score was used.
+Thereby, the quality is rated with a value between 1 (Bad) and 5 (Excellent). 
+In \cref{tab:capture} all selected scores for the different codecs and connection types can be seen. 
 
-- RTP Analyse + Grafen
-\subsection{Video codec quality comparison} \label{subsec:video}
-- Video codecs subjektiv vergleichen  
-
-z.B.\verb| https://en.wikipedia.org/wiki/Subjective_video_quality | 
-  
-Das ist so ähnlich wie MOS:
-https://www.irisa.fr/armor/lesmembres/Mohamed/Thesis/node146.html
-
-- RTP Analyse + Grafen
+In general, a big difference in QoS and Quality of Experience (QoE) could be observed depending on whether the connection was to the landline host or the satellite host.
+This is especially noticeable when comparing the loss rate.
+Connections over landline had a mean loss rate of XX and over satellite xx. 
+This also explains the large differences in QoE.
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
