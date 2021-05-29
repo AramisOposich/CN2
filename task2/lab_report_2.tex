@@ -159,7 +159,9 @@ This is especially noticeable when comparing the loss rate.
 According to the RTP stream analysis connections over satellite had a mean loss rate of 4.9\% and over landline none. 
 This also explains the large differences in QoS.
 
-- no RTCP ?
+For the RTP stream analysis only the values of the reverse channel were used, because the test setup is unsymmetrical.
+That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
+One result of this is that the packet loss of the out going traffic is always zero, regardless of the chosen connection or codec.
 
 - Was ist jitter skew und delta Einfluss auf QoS?
 
@@ -186,12 +188,6 @@ This also explains the large differences in QoS.
 The analysis of SIP calls showed how codecs can influence the experienced quality of service. 
 Especially on poor network connections like satellite links, the selected codec play a major role.
 The comparison showed that when using the VP8 codec with a satellite connection, the video was played back very choppy, while with MP4 the video had artifacts but ran fluently and was better to watch.
-
-****** Muss noch an die richtige Stelle kopiert werden
-
-For the RTP stream analysis only the values of the reverse channel were used, because the test setup is unsymmetrical.
-That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
-One result of this is that the packet loss of the out going traffic is always zero independent on the chosen connection or codec.
 
 %----------------------------------------------------------------------------------------
 %	SECTION X
