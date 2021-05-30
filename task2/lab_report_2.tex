@@ -179,7 +179,7 @@ Further analysis was done only with values of the satellite connection because h
 
 Figure \ref{fig:Audio} shows the RTP Stream parameters for different audio codecs used for the satellite connection. 
 It can be seen that only in the skew parameter the behavior of the stream deviates depending on the selected codec.
-The jitter and delta are nearly the same.
+The jitter and delta are nearly the same.In contrast to the compared audio codecs the influence of the video codecs on the stream parameter is very different. Figure \ref{fig:Video} shows that the stream with MP4V\_ES and H263-1998 had less jitter than VP8.
 
 
 
@@ -190,7 +190,7 @@ The jitter and delta are nearly the same.
 	\label{fig:Audio} % labeling to refer it inside the text
 \end{figure}
 
-In contrast to the compared audio codecs the influence of the video codecs on the stream parameter is very different. Figure \ref{fig:Video} shows that the stream with MP4V\_ES had less jitter than the other codecs.
+
 
 \begin{figure}[!ht]
 	\centering % centering figure 
@@ -207,7 +207,7 @@ In contrast to the compared audio codecs the influence of the video codecs on th
 
 The analysis of SIP calls showed how codecs can influence the experienced quality of service. 
 Especially on poor network connections like satellite links, the selected codec play a major role.
-The comparison showed that when using the VP8 codec with a satellite connection, the video was played back very choppy, while with MP4 the video had artifacts but ran fluently and was better to watch.
+The comparison showed that when using the VP8 codec with a satellite connection, the video was played back very choppy, while with MP4 and H263 the video had artifacts but ran fluently and was better to watch.
 
 %----------------------------------------------------------------------------------------
 %	SECTION X
