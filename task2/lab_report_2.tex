@@ -152,7 +152,18 @@ This behavior could be seen in most of the other captures as well, but it has no
 \subsection{Audio and video codec quality comparison} \label{subsec:audio}
 For the subjective quality measurement of the audio and video experience of different codecs the rating system of the Mean Opinion Score was used.
 Thereby, the quality is rated with a value between 1 (Bad) and 5 (Excellent). 
-In \cref{tab:capture} all selected scores for the different codecs and connection types can be seen. 
+In \cref{tab:capture} all selected scores for the different codecs and connection types can be seen.
+
+Furthermore wiresharks statistics tool have been used to meter some traffic flow metrics. Those attributes are visualized in this section. Figure \ref{fig:comparison} illustrates the difference between landline/satellite connection. The measured instances contains the same video codec, but in different call environment. 
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/Landline-Satelite-comparison.pdf} % importing figure
+	\caption{Video quality comparison of landline to satellite} 
+	\label{fig:comparison} % labeling to refer it inside the text
+\end{figure} 
+
+For the satellite video quality, indicated by the value of jitter, it makes a big difference if MP4\_ES have been chosen over VP8. The landline on the other hand does shows this big contrast.
 
 In general, a big difference in QoS and Quality of Experience (QoE) could be observed depending on whether the connection was to the landline host or the satellite host.
 This is especially noticeable when comparing the loss rate.
