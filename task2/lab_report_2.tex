@@ -174,12 +174,16 @@ For the RTP stream analysis only the values of the reverse channel were used, be
 That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
 One result of this is that the packet loss of the out going traffic is always zero, regardless of the chosen connection or codec.
 
+For a separate measrument of the video and audio qaulity this assigment captures further metrics of the VoIP call. Figure \ref{fig:Audio} indicates no major deviation between those codecs.
+
 \begin{figure}[!ht]
 	\centering % centering figure 
 	\includegraphics[width=\textwidth]{images/satelite-audio-histogram.pdf} % importing figure
 	\caption{Audio codec - satelite connection} 
 	\label{fig:Audio} % labeling to refer it inside the text
-\end{figure} 
+\end{figure}
+
+Concerning the audio quality of the satellite connection the choice of codecs is key. MP4\_ES denotes the lowest jitter, skew and delta.
 
 \begin{figure}[!ht]
 	\centering % centering figure 
