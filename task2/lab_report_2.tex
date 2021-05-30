@@ -80,13 +80,13 @@ The endpoint is also defined by the location, which is identified by an IP addre
 	\label{fig:SIP Registrar} % labeling to refer it inside the text
 \end{figure}
 
-The first sequence is the initial registration request from SIP User Agent with it's address information, the first SIP registrar answers with the information about the login "401 Unauthorized". To be authenticate, the client will combine the received nonce with his user and password information and create an MD5 hash out of them. As the figure above indicates, there has been two failed login for the registration. The last "200 OK" response state a successful login.
+The first sequence is the initial registration request from SIP User Agent with it's address information, the first SIP registrar answers with the information about the login "401 Unauthorized". To be authenticate, the client will combine the received nonce with his user and password information and create an MD5 hash out of them. As the figure above indicates, there has been two failed logins for the registration. The last "200 OK" response state a successful login.
 
 \subsubsection{secret message}
-One of the task was to extract a secret message from the registration process. This message has been embedded in the last "200 OK" response of the SIP registrar. An additonal header filed, called Message header contained the cleartext information.
+One of the task was to extract a secret message from the registration process. This message has been embedded in the last "200 OK" response of the SIP registrar. An additional header filed, called message header contained the cleartext information.
 
 \begin{itemize}
-	\item Session Initialisation Protocol(20) $\to$ Message Header $\to$ Secret-Message: Dazecixaru4
+	\item Session Initiation Protocol(20) $\to$ Message Header $\to$ Secret-Message: Dazecixaru4
 \end{itemize}
 
 \subsection{Capturing process} \label{subsec:capture}
@@ -128,7 +128,7 @@ Table \ref{tab:capture} shows all captured calls and the chosen codecs.
 \end{table}
 
 Because capturing all combinations of audio and video codecs would take too much time a selection of codecs was tested independent of each other.
-That means we assume the chosen codecs does not influence one another.
+That means we assume the chosen audio and video codecs does not influence one another.
 This should not be done for precise performance testing.
 
 \subsection{SIP signaling and SDP} \label{subsec:signaling}
@@ -154,7 +154,9 @@ For the subjective quality measurement of the audio and video experience of diff
 Thereby, the quality is rated with a value between 1 (Bad) and 5 (Excellent). 
 In \cref{tab:capture} all selected scores for the different codecs and connection types can be seen.
 
-Furthermore wiresharks statistics tool have been used to meter some traffic flow metrics. Those attributes are visualized in this section. Figure \ref{fig:comparison} illustrates the difference between landline/satellite connection. The measured instances contains the same video codec, but in different call environment. 
+Furthermore wiresharks statistics tool have been used to meter some traffic flow metrics. Those attributes are visualized in this section. For the RTP stream analysis only the values of the reverse channel were used, because the test setup is unsymmetrical.
+That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
+One result of this is that the packet loss of the out going traffic is always zero, regardless of the chosen connection or codec.
 
 \begin{figure}[!ht]
 	\centering % centering figure 
@@ -163,18 +165,23 @@ Furthermore wiresharks statistics tool have been used to meter some traffic flow
 	\label{fig:comparison} % labeling to refer it inside the text
 \end{figure} 
 
-For the satellite video quality, indicated by the value of jitter, it makes a big difference if MP4\_ES have been chosen over VP8. The landline on the other hand does shows this big contrast.
+
 
 In general, a big difference in QoS and Quality of Experience (QoE) could be observed depending on whether the connection was to the landline host or the satellite host.
 This is especially noticeable when comparing the loss rate.
 According to the RTP stream analysis connections over satellite had a mean loss rate of 4.9\% and over landline none. 
-This also explains the large differences in QoS.
+Figure \ref{fig:comparison} shows the jitter of the VP8 and MP4\_ES video RTP stream, but in different call environments. 
+For the satellite connection it makes a big difference if MP4\_ES has been chosen over VP8. 
+The landline connection on the other hand does not show this contrast.
+This explains the large differences in EoS in the subjective comparison.
 
-For the RTP stream analysis only the values of the reverse channel were used, because the test setup is unsymmetrical.
-That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
-One result of this is that the packet loss of the out going traffic is always zero, regardless of the chosen connection or codec.
+Further analysis was done only with values of the satellite connection because here the difference of the codecs can be seen better.
 
-For a separate measrument of the video and audio qaulity this assigment captures further metrics of the VoIP call. Figure \ref{fig:Audio} indicates no major deviation between those codecs.
+Figure \ref{fig:Audio} shows the RTP Stream parameters for different audio codecs used for the satellite connection. 
+It can be seen that only in the skew parameter the behavior of the stream deviates depending on the selected codec.
+The jitter and delta are nearly the same.
+
+
 
 \begin{figure}[!ht]
 	\centering % centering figure 
@@ -183,7 +190,7 @@ For a separate measrument of the video and audio qaulity this assigment captures
 	\label{fig:Audio} % labeling to refer it inside the text
 \end{figure}
 
-Concerning the audio quality of the satellite connection the choice of codecs is key. MP4\_ES denotes the lowest jitter, skew and delta.
+In contrast to the compared audio codecs the influence of the video codecs on the stream parameter is very different. Figure \ref{fig:Video} shows that the stream with MP4V\_ES had less jitter than the other codecs.
 
 \begin{figure}[!ht]
 	\centering % centering figure 
