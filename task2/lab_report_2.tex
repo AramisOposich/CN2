@@ -1,0 +1,218 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CN2 Labreport template
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[parskip=full]{scrartcl}
+
+\usepackage{siunitx}  % Provides the \SI{}{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{booktabs} % nicer tables
+\usepackage[noabbrev]{cleveref} % automatic references
+\usepackage{listings} % typeset code
+\usepackage[backend=biber]{biblatex}
+\addbibresource{referenzen.bib}
+
+\crefname{lstlisting}{listing}{listings} % for referencing code
+\Crefname{lstlisting}{Listing}{Listings} % for referencing code
+
+\usepackage[headsepline]{scrlayer-scrpage} % header
+\ohead{Group 06} % right part of header
+\ihead{Assignment 2} % left part of header
+
+\lstset{basicstyle=\ttfamily} % monospaced font in listing
+
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \textbf{Communication Networks 2}}\\
+    SS 2021\\
+    \vspace*{1cm}
+    {\Large Assignment 2}
+    \\\vspace*{3cm}
+    {\Large \textbf{Group 06}}\\
+    \vspace*{1cm}
+    {\large 
+        \begin{tabular}{l c c}
+            Name & Mat.Nummer \\ \hline
+            Paul Kloker & 12034928 \\
+            Juan Aramis Oposich & 11701238
+        \end{tabular}
+    }
+    \\\vspace*{7cm}
+    \today
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+\section{Task description} \label{sec:task}
+The task of this assignment is to set up a Voice over IP (VoIP) Client and compare the influence of multimedia codecs on the Quality of Service (QoS) of video calls.
+Furthermore, the signaling messages of the Session Initiation Protocol (SIP) shall be analyzed to verify the correct behavior and to find a secret message of the registrar.
+
+The comparison of the QoS is to be done once subjectively and once on the basis of self-selected network parameters, which are also to be visualized graphically. 
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+\section{Procedure} \label{sec:procedure}
+
+\subsection{Linphone setup and SIP registration} \label{subsec:setup}
+Before a VoIP call can be done, one of the first thing is to do a SIP registration. SIP Endpoints are identified by their Address of Record, for example "sip:cn\_06@cn2lab.cn.tuwien.at".
+
+The endpoint is also defined by the location, which is identified by an IP address, port number and protocol. To receive calls, the caller needs to know the location of the callee. Since most SIP endpoints do not have a permanent, fixed, publicly-reachable IP address, they will need to register with a central server, or Registrar, so that they can receive incoming calls. This server accepts REGISTER requests and places the information it receives in those requests into the location service for the domain it handles. In figure \labelcref{fig:SIP Registrar} the SIP registration flow can be seen. 
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/FlowSeqReg.pdf} % importing figure
+	\caption{SIP registration flow} 
+	\label{fig:SIP Registrar} % labeling to refer it inside the text
+\end{figure}
+
+The first sequence is the initial registration request from SIP User Agent with it's address information, the first SIP registrar answers with the information about the login "401 Unauthorized". To be authenticate, the client will combine the received nonce with his user and password information and create an MD5 hash out of them. As the figure above indicates, there has been two failed logins for the registration. The last "200 OK" response state a successful login.
+
+\subsubsection{secret message}
+One of the task was to extract a secret message from the registration process. This message has been embedded in the last "200 OK" response of the SIP registrar. An additional header filed, called message header contained the cleartext information.
+
+\begin{itemize}
+	\item Session Initiation Protocol(20) $\to$ Message Header $\to$ Secret-Message: Dazecixaru4
+\end{itemize}
+
+\subsection{Capturing process} \label{subsec:capture}
+This year because of the COVID-19 pandemic it was only possible to access the lab PCs remotely.
+This is most of the time no problem but to compare the video and audio quality of SIP calls it is important to have direct access, because the VNC connection influences the subjective impressions.
+To overcome this problem a command line tool called \verb|cn2_sbs_capture| has been provided, which captures the incoming audio and video and the outgoing video.
+Because the camera and microphone of the lab PC could not be used the same video was played each call.
+
+To capture a call, the selected codecs were first set in the Linphone settings. 
+Then \verb|cn2_sbs_capture| was executed with the default settings and the Wireshark capture was started. 
+After that a one-minute-long call was made. 
+Table \ref{tab:capture} shows all captured calls and the chosen codecs.
+
+\begin{table}[hb]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|p{0.25\textwidth}|}
+		\hline
+		\textbf{No.} & \textbf{type} & \textbf{v. codec} &\textbf{v. score} & \textbf{a. codec} & \textbf{a. score} & \textbf{comment} \\ 
+		\hline
+		1 & landline & VP8 &5& OPUS &4&- \\
+		\hline
+		2 & satellite & VP8 &1 &  OPUS &3&no fluent video just single frames every view seconds\\
+		\hline
+		3 & landline & MP4V\_ES &5& speex 16 kHz &3&-\\
+		\hline
+		4 & satellite & MP4V\_ES &2& speex 16 kHz &2& fluent video but with many large artifacts \\
+		\hline
+		5 & landline & MP4V\_ES &5& PCMU &2& -\\
+		\hline
+		6 & satellite & MP4V\_ES &2& PCMU &1& audio stream sometimes stops\\
+		\hline
+		7 & satellite & H.263-1998 &2& GSM&1& fluent video but reduced resolution\\
+		\hline
+		8 & satellite & H.263 &1& speex 8 kHz&2& no video at all\\
+		\hline
+	\end{tabular}
+	\caption{Captured calls and quality rating (audio $\rightarrow$ a., video $\rightarrow$ v.)}
+	\label{tab:capture}
+\end{table}
+
+Because capturing all combinations of audio and video codecs would take too much time a selection of codecs was tested independent of each other.
+That means we assume the chosen audio and video codecs does not influence one another.
+This should not be done for precise performance testing.
+
+\subsection{SIP signaling and SDP} \label{subsec:signaling}
+
+To verify that both, signaling and media works correctly and the predefined codecs are used for media transfer, a sequence diagram was created and analyzed for each capture.
+Figure \ref{fig:sigFlow} shows the sequence diagram of the SIP signaling and the media flows during the call with the VP8 video codec and the OPUS audio codec over landline. 
+It was created by using the Wireshark SIP Flows tool. 
+A deeper look in the SDP section in the body of the third message in the flow confirms that the offered codecs in the \verb|INVITE| message were accepted by the callee.
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/VP8_OPUS_landline_flow.pdf} % importing figure
+	\caption{SIP signaling sequence diagram} 
+	\label{fig:sigFlow} % labeling to refer it inside the text
+\end{figure} 
+In some calls, especially in the satellite calls, retransmissions of signaling messages could be identified in the auto generated sequence diagram. 
+A unexpected behavior which can be seen in \cref{fig:sigFlow} is the order of the \verb|ACK| message and the initial OPUS RTP stream message. 
+Actually, the \verb|ACK| is sent directly after a \verb|200 OK| of the offer and answer process but here the OPUS RTP stream starts before the acknowledgment.
+This behavior could be seen in most of the other captures as well, but it has no influence on the functionality because the callee already accepted the offered codecs and the \verb|ACK| message is an own transaction and is not bound to the previous messages.
+
+\subsection{Audio and video codec quality comparison} \label{subsec:audio}
+For the subjective quality measurement of the audio and video experience of different codecs the rating system of the Mean Opinion Score was used.
+Thereby, the quality is rated with a value between 1 (Bad) and 5 (Excellent). 
+In \cref{tab:capture} all selected scores for the different codecs and connection types can be seen.
+
+Furthermore wiresharks statistics tool have been used to meter some traffic flow metrics. Those attributes are visualized in this section. For the RTP stream analysis only the values of the reverse channel were used, because the test setup is unsymmetrical.
+That means only the packets coming from the other host traveled along the whole path, while the traffic form the linphone client is captured by wireshark directly before leaving the computer.
+One result of this is that the packet loss of the out going traffic is always zero, regardless of the chosen connection or codec.
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/comparison.pdf} % importing figure
+	\caption{Video quality comparison of landline to satellite} 
+	\label{fig:comparison} % labeling to refer it inside the text
+\end{figure} 
+
+
+
+In general, a big difference in QoS and Quality of Experience (QoE) could be observed depending on whether the connection was to the landline host or the satellite host.
+This is especially noticeable when comparing the loss rate.
+According to the RTP stream analysis connections over satellite had a mean loss rate of 4.9\% and over landline none. 
+Figure \ref{fig:comparison} shows the jitter of the VP8 and MP4\_ES video RTP stream, but in different call environments. 
+For the satellite connection it makes a big difference if MP4\_ES has been chosen over VP8. 
+The landline connection on the other hand does not show this contrast.
+This explains the large differences in EoS in the subjective comparison.
+
+Further analysis was done only with values of the satellite connection because here the difference of the codecs can be seen better.
+
+Figure \ref{fig:Audio} shows the RTP Stream parameters for different audio codecs used for the satellite connection. 
+It can be seen that only in the skew parameter the behavior of the stream deviates depending on the selected codec.
+The jitter and delta are nearly the same.In contrast to the compared audio codecs the influence of the video codecs on the stream parameter is very different. Figure \ref{fig:Video} shows that the stream with MP4V\_ES and H263-1998 had less jitter than VP8.
+
+
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/satelite-audio-histogram.pdf} % importing figure
+	\caption{Audio codec - satelite connection} 
+	\label{fig:Audio} % labeling to refer it inside the text
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/satelite-video-histogram.pdf} % importing figure
+	\caption{Video codec - satelite connection} 
+	\label{fig:Video} % labeling to refer it inside the text
+\end{figure} 
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Conclusion}
+
+The analysis of SIP calls showed how codecs can influence the experienced quality of service. 
+Especially on poor network connections like satellite links, the selected codec play a major role.
+The comparison showed that when using the VP8 codec with a satellite connection, the video was played back very choppy, while with MP4 and H263 the video had artifacts but ran fluently and was better to watch.
+
+%----------------------------------------------------------------------------------------
+%	SECTION X
+%---------------------------------------------------------------------------------------
+
+\printbibliography
+
+\end{document}
