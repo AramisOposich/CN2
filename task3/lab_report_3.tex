@@ -189,7 +189,7 @@ Some entries could not be identified by just using the ping command on the lab p
 	\caption{Routing table}
 	\label{tab:routing}
 \end{table}
-
+\clearpage
 \section{Data analysis and comparison} \label{sec:data}
 - Welche daten liefert ping
 
@@ -197,7 +197,30 @@ Some entries could not be identified by just using the ping command on the lab p
 
 - Vergleich mit den gemessenen Daten von Task 2
 
+One of the most important as metrics of a real-time communication like VoIP is the end-to-end ($T_{EE}$) delay. In this context the ITU-T recommendation G.114 has classified the user acceptance for end-to-end delays in a VoIP call \cite{ITU-TRecommendationG.114}:
 
+\begin{table}[hb]
+	\centering
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{End-to-End delay} & \textbf{User experience} \\ \midrule
+			$T_{EE} < 150$ & acceptable for all users \\
+			$150 < T_{EE} < 300$ & noticeable quality degradation, but still acceptable for most users\\
+			$T_{EE} \geq 300$ & not acceptable\\
+			\bottomrule
+		\end{tabular}
+		\caption{Delay to user experience}
+		\label{tab:delayEnd2End}
+	\end{table}
+	
+To determine the one-way transmission time it is mandatory to divide the RRT value by two.
+
+\begin{figure}[!ht]
+	\centering % centering figure 
+	\includegraphics[width=\textwidth]{images/oneWayDelay.pdf} % importing figure
+	\caption{Propobility density of one way delay} 
+	\label{fig:one-way-delay} % labeling to refer it inside the text
+\end{figure}
 
 
 
