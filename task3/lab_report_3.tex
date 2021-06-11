@@ -225,37 +225,37 @@ To determine the one-way transmission time it is mandatory to divide the RRT val
 
 \begin{table}[hb]
 	\centering
-	\begin{tabular}{|llll|}
+	\begin{tabular}{|lllrrrr|}
 		\hline
-		\textbf{Device} & \textbf{IP addresses} & \textbf{loss} &\textbf{avg. RTT}  \\ 
+		\textbf{Device} & \textbf{IP addresses} & \textbf{loss} &\textbf{RTT: min} & \textbf{avg} & \textbf{max }& \textbf{mdev}  \\ 
 		\hline
-		r1 	& 10.0.120.2 & 0 \% & 8.116 ms\\
+		r1 	& 10.0.120.2 & 0 \% & 7.326 ms& 8.116 ms& 8.910 ms& 0.420 ms\\
 		%\hline
-		 	& 10.0.4.1 & 0 \% & 8.117 ms\\
+		 	& 10.0.4.1 & 0 \% & 7.370 ms & 8.117 ms & 8.911 ms & 0.457 ms\\
 		%\hline
-		 	& 10.0.132.1 & 0 \% & 8.164 ms\\
+		 	& 10.0.132.1 & 0 \% & 7.402 ms & 8.164 ms & 8.910 ms & 0.431 ms\\
 		\hline
-		r2	& 10.0.120.1 & 0 \% & 163.019 ms\\
+		r2	& 10.0.120.1 & 0 \% & 153.474 ms & 163.019 ms & 313.394 ms & 21.716 ms\\
 		%\hline
-			& 10.0.248.2 & 0 \% & 160.040 ms\\
+			& 10.0.248.2 & 0 \% & 154.024 ms & 160.040 ms & 167.527 ms & 3.571 ms\\
 		%\hline
-			& 10.1.6.1 & 0 \% & 160.757 ms\\
+			& 10.1.6.1 & 0 \% & 153.802 ms & 160.757 ms & 166.669 ms & 3.147 ms\\
 		\hline
-		r3	& 10.0.4.2 & 0 \% & 163.382 ms\\
+		r3	& 10.0.4.2 & 0 \% & 153.550 ms & 163.382 ms & 307.946 ms & 20.883 ms\\
 		%\hline
-			& 10.0.248.1 & 6 \% & 759.654 ms\\
+			& 10.0.248.1 & 6 \% & 747.294 ms & 759.654 ms & 777.453 ms & 9.390 ms\\
 		%\hline
-			& 10.1.7.1 & 8 \% & 759.357 ms\\
+			& 10.1.7.1 & 8 \% & 748.035 ms & 759.357 ms & 773.321 ms & 8.581 ms\\
 		\hline
-		Satellite & 10.1.7.123 & 6 \% & 759.713 ms \\
+		Satellite & 10.1.7.123 & 6 \% & 745.616 ms & 759.713 ms & 776.987 ms & 10.471 ms \\
 		\hline
-		Landline & 10.1.6.110 & 0 \% & 761.041 ms \\
+		Landline & 10.1.6.110 & 0 \% & 154.818 ms & 159.911 ms & 165.216 ms & 3.349 ms \\
 		\hline
-		Unknown host & 10.0.132.68 & 0 \% & 8.189 ms\\
+		Unknown host & 10.0.132.68 & 0 \% & 7.323 ms & 8.189 ms & 8.966 ms & 0.518 ms\\
 		\hline
 	\end{tabular}
-	\caption{Discovered IP addresses}
-	\label{tab:data}
+	\caption{Ping data from lab pc to different network devices (50 packets)}
+	\label{tab:ping}
 \end{table}
 
 
