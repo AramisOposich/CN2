@@ -25,7 +25,9 @@
 
 \lstset{basicstyle=\ttfamily} % monospaced font in listing
 
-
+% Automata 
+\usepackage{pgfplots}
+\usetikzlibrary{automata,arrows,positioning} 
 
 %----------------------------------------------------------------------------------------
 %	DOCUMENT INFORMATION
@@ -56,55 +58,136 @@
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
-\section{Task description} \label{sec:task}
+\section{Task description and setup} \label{sec:task}
+The task of the last assignment is to model a network in NS-3, which is an open source network simulator, according to the following network diagram (\cref{fig:2a}).
+Furthermore, a 10 seconds long simulation with a ping measurement from node 1 to node 3 shall be done and the generated measurement data discussed.
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}[ >=stealth', auto, semithick, node distance=6cm]
+	\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1]
+	\node[state]    (0)               {$1$};
+	\node[state]    (1)[right of=0]   {$2$};
+	\node[state]    (2)[ right of=1]  {$3$};
+	\path
+	(0)	edge[above left] 	    	node{$10.0.120.2\ \ \ \ $}		(1)
+	(0)	edge[above right] 	    	node{$\ \ \ \ 10.0.120.1$}		(1)
+	(0)	edge[below] 	    		node{$PointToPoint$}				(1)
+	(1)	edge[above left] 	    	node{$10.0.248.1\ \ \ \ $}		(2)
+	(1)	edge[above right] 	    	node{$\ \ \ \ 10.0.248.2$}		(2)
+	(1)	edge[below] 	    		node{$CSMA$}				(2);
+	
+	\end{tikzpicture}
+	\caption{Network topology}
+	\label{fig:2a}
+\end{figure}
+
+For this the latest version of NS-3 was downloaded form \verb|https://www.nsmam.org| and build with the command \verb|$ ./bulid.py|. 
+
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 \section{NS3 Model} \label{sec:procedure}
+NS-3 models are C++ based and consist out of network nodes, network devices, communication channels and applications.
+Most of the code is based on the second tutorial in the example folder.
+Listing \ref{lst:creation} shows the creation of the topology
+Because our system consists out of one PointToPoint connection and one Carrier Sense Multiple Access (CSMA) network, different kind of nodes were created and the given channel attributes were set by using the helper objects.
+To finish the topology creation helper objects were used to install the network devices and a IP stack for every node.
 
+\begin{lstlisting}[language=c++, frame=single, captionpos=b, caption={Topology creation}, label=lst:creation]
+//P2P
+NodeContainer p2pNodes;
+p2pNodes.Create (2);
 
-\begin{verbatim}
-$ nmap --privileged -sn -n -T5 --min-parallelism 100 --min-hostgroup 100 
-10.0.0.0/16
-\end{verbatim}
+PointToPointHelper pointToPoint;
+pointToPoint.SetDeviceAttribute ("DataRate", 
+                                  StringValue ("11Mbps"));
+pointToPoint.SetChannelAttribute ("Delay", 
+                                   StringValue ("80ms"));
+                                   
+NetDeviceContainer p2pDevices;
+p2pDevices = pointToPoint.Install (p2pNodes);
+
+//CSMA
+NodeContainer csmaNodes;
+csmaNodes.Add (p2pNodes.Get (0));
+csmaNodes.Create (1);
+
+CsmaHelper csma;
+csma.SetChannelAttribute ("DataRate", 
+                           StringValue ("70Mbps"));
+csma.SetChannelAttribute ("Delay", 
+                           TimeValue (MicroSeconds (1000)));
+                           
+NetDeviceContainer csmaDevices;
+csmaDevices = csma.Install (csmaNodes);
+
+InternetStackHelper stack;the
+stack.Install (p2pNodes.Get (1));
+stack.Install (csmaNodes);
+\end{lstlisting}
 
 
 \begin{table}[hb]
 	\centering
-	\begin{tabular}{|llll|}
-		\hline
-		\textbf{No.} & \textbf{Network} & \textbf{IP address} &\textbf{latency}  \\ 
-		\hline
-		1 & 10.0.0.0/8 & 10.0.4.1 &0.0075s\\
-		%\hline
-		2 & 10.0.0.0/8 & 10.0.4.2 &0.23s\\
-		\hline
-		3 & 10.0.0.0/8 & 10.0.120.1 &0.20s\\
-		%\hline
-		4 & 10.0.0.0/8 & 10.0.120.2 &0.0085s\\
-		\hline
-		5 & 10.0.0.0/8 & 10.0.132.1 &0.024s\\
-		%\hline
-		6 & 10.0.0.0/8 & 10.0.132.68 &0.18s\\
-		\hline
-		7 & 10.0.0.0/8 & 10.0.248.1 &0.78s\\
-		%\hline
-		8 & 10.0.0.0/8 & 10.0.248.2 &0.16s\\
-		\hline
-		\hline
-		9 & 10.1.0.0/8 & 10.1.6.1 &0.18s\\
-		%\hline
-		10 & 10.1.0.0/8 & 10.1.6.110 &0.18s\\
-		\hline
-		11 & 10.1.0.0/8 & 10.1.7.1 &1.5s\\
-		%\hline
-		12 & 10.1.0.0/8 & 10.1.7.123 &0.78s\\
-		\hline
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Node No.} & \textbf{NS-3 Node Container Element} & \textbf{IP Address}\\ \midrule
+		1 & p2pNodes.Get(1) & 10.0.120.2 \\
+		2 & p2pNodes.Get(0) & 10.0.120.1 \\
+		2 & csmaNodes.Get(0) & 10.0.248.1 \\
+		3 & csmaNodes.Get(1) & 10.0.248.2 \\
+		\bottomrule
 	\end{tabular}
-	\caption{Discovered IP addresses}
-	\label{tab:nmap}
+	\caption{Nodes and the according NS-3 node container element}
+	\label{tab:Nodes}
 \end{table}
+
+To create a routing table with the \verb|Ipv4GlobalRoutingHelper|, both subnets first got the right address space assigned to them (see \ref{lst:address}).
+
+\begin{lstlisting}[language=c++, frame=single, captionpos=b, caption={IP address assignment and routing table creation}, label=lst:address]
+Ipv4AddressHelper address;
+address.SetBase ("10.0.120.0", "255.255.255.0");
+Ipv4InterfaceContainer p2pInterfaces;
+p2pInterfaces = address.Assign (p2pDevices);
+
+address.SetBase ("10.0.248.0", "255.255.255.0");
+Ipv4InterfaceContainer csmaInterfaces;
+csmaInterfaces = address.Assign (csmaDevices);
+
+Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
+\end{lstlisting}
+
+Listing \ref{lst:ping} shows how the ping to the third node was created and installed on the first node. 
+The attribute \verb|Verbose| was set to true to create a ping-style output. 
+The payload was set to 1024 bytes and the interval between the ping messages to 0.2 Seconds.
+The last two lines of \cref{lst:ping} define how long the ping application will run during the simulation
+
+\begin{lstlisting}[language=c++, frame=single , captionpos=b, label=lst:ping]
+V4PingHelper ping = V4PingHelper (
+		    csmaInterfaces.GetAddress (1));
+ping.SetAttribute ("Verbose", BooleanValue (true));
+ping.SetAttribute ("Size", UintegerValue(1024));
+ping.SetAttribute ("Interval", TimeValue(Seconds(0.2)));
+ApplicationContainer apps = ping.Install (p2pNodes.Get (1));
+apps.Start (Seconds (1.0));
+apps.Stop (Seconds (10.0));
+}
+\end{lstlisting}
+
+Before the simulation was invoked the stop time was specified and packet capturing was enabled for all P2P and CSMA nodes (see \cref{lst:simulation}).
+
+\begin{lstlisting}[language=c++, frame=single , captionpos=b, caption={pcap and simulation start}, label=lst:simulation]
+csma.EnablePcapAll("assignment4", true);
+pointToPoint.EnablePcapAll ("assignment4", true);
+
+Simulator::Stop (Seconds (10.0));
+Simulator::Run ();
+Simulator::Destroy ();
+}
+\end{lstlisting}
+
+The code was then compiled and execute with \verb|waf|. This created the ping measurement and pcap data which will be discussed in the next section. 
 
 \section{Data analysis and comparison} \label{sec:data}
 
