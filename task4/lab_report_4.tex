@@ -83,7 +83,7 @@ Furthermore, a 10 seconds long simulation with a ping measurement from node 1 to
 	\label{fig:2a}
 \end{figure}
 
-For this the latest version of NS-3 was downloaded form \verb|https://www.nsmam.org| and build with the command \verb|$ ./bulid.py|. 
+For this the latest version of NS-3 was downloaded form \verb|https://www.nsmam.org| and build with the command \verb|$ ./build.py|. 
 
 
 %----------------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 Listing \ref{lst:ping} shows how the ping to the third node was created and installed on the first node. 
 The attribute \verb|Verbose| was set to true to create a ping-style output. 
 The payload was set to 1024 bytes and the interval between the ping messages to 0.2 Seconds.
-The last two lines of \cref{lst:ping} define how long the ping application will run during the simulation
+The last two lines of \cref{lst:ping} define how long the ping application will run during the simulation.
 
 \begin{lstlisting}[language=c++, frame=single , captionpos=b, label=lst:ping]
 V4PingHelper ping = V4PingHelper (
@@ -210,6 +210,7 @@ The code was then compiled and execute with \verb|waf|. This created the ping me
 %6.) What do we need ARP for?
 %    -> to get the MAC address of a node in the same network. (only IP address is known) . No ARP in P2P because there is just one possible Receiver
 %8.) Why is checksum computation turned off by default in a ns-3 simulation? Is it a problem/does it make a difference to omit checksums? !! The checksum is disabled by default to let the simulations run faster./ There is no need for a checksum because there are no Errors !!
+
 The simulation delivered 45 ping measurements of which 44 had a Round Trip Time (RTT) of exact 163.779 ms. 
 Only the first message deviated from this value with a RRT of 178.881 ms. 
 This is because of the two initial ARP request and response messages which can be seen in the pcap files of node two and three.
@@ -225,9 +226,13 @@ After the initial set-up the RTT can be divided into the propagation delay ($ t_
 \[t_t = 2\cdot(\frac{1054\cdot8}{\SI{11}{\mega\bit\per\second}} +\frac{1054\cdot8}{\SI{70}{\mega\bit\per\second}}) = 1.774\si{\milli\second} \]
 \[ RTT = t_p + t_t = 163.774 \]
 
-There are ohter delay types as well, like processing delay and queuing delay, but they are not considered in the simulation. 
+There are other delay types as well, like processing delay and queuing delay, but they are not considered in the simulation. 
 In reality the RTT is a bit different each time because of the changing network load, and there are sometimes lost packets,  but this behavior was not considered in this model.
 
+While analysing the pcap files with WireShark, it was noticed that the checksums in the IP and ICMP header were not calculated and were always zero. 
+This is due to the fact that NS-3 disables the calculation of the checksum by default, as this would slow down the simulation.
+Normally the calculation is done with hardware support which speeds up the calculation in reality. 
+There is no need for checksums anyhow because no error behavior like flipping bits was modeled.
 
 
 %----------------------------------------------------------------------------------------
