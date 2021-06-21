@@ -191,15 +191,23 @@ Simulator::Destroy ();
 The code was then compiled and execute with \verb|waf|. This created the ping measurement and pcap data which will be discussed in the next section. 
 
 \section{Data analysis} \label{sec:data}
+
+% 
+
 %Questions to be answered:
 %1.) Why do the reported round-trip-times deviate from the sum of link delays? 
+% 	 ->
 %2.) Why does the first ping reply have a higher round-trip-time than subsequent ones?
-%3.) Which types of delay have been defined and used in Assignment 4?
-
+%    -> because of ARP
+%3.) Which types of delay have been defined and used in Assignment 4? 
+% 	 -> Propagation delay, Transmission delay
 %4.) How can we compute the transmission delay?
+%    -> t_T = n/b  (n = number of bits, b = bandwidth in bits/sec)
 %5.) You simulated ping requests using a network consisting of one Point-to-Point link and one CSMA link. Which types of delay can the observed round-trip-delay be decomposed to?
+%    -> 162ms propagation delay, 1.774 ms transmission delay ()and 5us processing) 
 %6.) What do we need ARP for?
-%8.) Why is checksum computation turned off by default in a ns-3 simulation? Is it a problem/does it make a difference to omit checksums? !! The checksum is disabled by default to let the simulations run faster. !!
+%    -> to get the MAC address of a node in the same network. (only IP address is known) . No ARP in P2P because there is just one possible Receiver
+%8.) Why is checksum computation turned off by default in a ns-3 simulation? Is it a problem/does it make a difference to omit checksums? !! The checksum is disabled by default to let the simulations run faster./ There is no need for a checksum because there are no Errors !!
 
 This chapter supports the understanding of the simulation model. Network model are been used to further estimate a real world scenario without a concrete build. Those models contains nodes and links just like a real internet system. For this problem we used NS-3 deploys a discrete-event simulator.
 
