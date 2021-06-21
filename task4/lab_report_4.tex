@@ -142,6 +142,7 @@ stack.Install (csmaNodes);
 	\caption{Nodes and the according NS-3 node container element}
 	\label{tab:Nodes}
 \end{table}
+\clearpage
 
 To create a routing table with the \verb|Ipv4GlobalRoutingHelper|, both subnets first got the right address space assigned to them (see \ref{lst:address}).
 
@@ -165,7 +166,7 @@ The last two lines of \cref{lst:ping} define how long the ping application will 
 
 \begin{lstlisting}[language=c++, frame=single , captionpos=b, label=lst:ping]
 V4PingHelper ping = V4PingHelper (
-		    csmaInterfaces.GetAddress (1));
+csmaInterfaces.GetAddress (1));
 ping.SetAttribute ("Verbose", BooleanValue (true));
 ping.SetAttribute ("Size", UintegerValue(1024));
 ping.SetAttribute ("Interval", TimeValue(Seconds(0.2)));
@@ -189,30 +190,20 @@ Simulator::Destroy ();
 
 The code was then compiled and execute with \verb|waf|. This created the ping measurement and pcap data which will be discussed in the next section. 
 
-\section{Data analysis and comparison} \label{sec:data}
+\section{Data analysis} \label{sec:data}
+%Questions to be answered:
+%1.) Why do the reported round-trip-times deviate from the sum of link delays? 
+%2.) Why does the first ping reply have a higher round-trip-time than subsequent ones?
+%3.) Which types of delay have been defined and used in Assignment 4?
 
+%4.) How can we compute the transmission delay?
+%5.) You simulated ping requests using a network consisting of one Point-to-Point link and one CSMA link. Which types of delay can the observed round-trip-delay be decomposed to?
+%6.) What do we need ARP for?
+%8.) Why is checksum computation turned off by default in a ns-3 simulation? Is it a problem/does it make a difference to omit checksums? !! The checksum is disabled by default to let the simulations run faster. !!
 
-\begin{table}[hb]
-	\centering
-	\begin{tabular}{ll}
-		\toprule
-		\textbf{End-to-End delay} & \textbf{User experience} \\ \midrule
-			$T_{EE} < 150$ & acceptable for all users \\
-			$150 < T_{EE} < 300$ & noticeable quality degradation, but still acceptable for most users\\
-			$T_{EE} \geq 300$ & not acceptable\\
-			\bottomrule
-		\end{tabular}
-		\caption{Delay to user experience}
-		\label{tab:delayEnd2End}
-	\end{table}
+This chapter supports the understanding of the simulation model. Network model are been used to further estimate a real world scenario without a concrete build. Those models contains nodes and links just like a real internet system. For this problem we used NS-3 deploys a discrete-event simulator.
 
-\begin{figure}[!ht]
-	\centering % centering figure 
-	\includegraphics[width=\textwidth]{images/oneWayDelay.pdf} % importing figure
-	\caption{Propobility density of one way delay} 
-	\label{fig:one-way-delay} % labeling to refer it inside the text
-\end{figure}
-
+The assignment describes the needed network parameter like the network topology and the associated metrics. One task is to setup one point to point connection and also a CSMA link. those connections are implemented with \textbf{PointToPointHelper} and \textbf{CsmaHelper}. This classes are used to set up the IP addresses, MAC address and also channel delay. The channel delays, also propagation delays, is the time that it takes for a bit to reach from one end of a link to the other. The delay depends on the distance between the sender and the receiver, and the propagation speed of the wave signal.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 3
