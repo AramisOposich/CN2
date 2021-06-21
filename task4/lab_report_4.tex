@@ -8,7 +8,9 @@
 
 \documentclass[parskip=full]{scrartcl}
 
-\usepackage{siunitx}  % Provides the \SI{}{} command for typesetting SI units
+\usepackage[binary-units=true]{siunitx}  % Provides the \SI{}{} command for typesetting SI units
+%\sisetup{per-mode=symbol,per-symbol = p}
+
 \usepackage{graphicx} % Required for the inclusion of images
 \usepackage{booktabs} % nicer tables
 \usepackage[noabbrev]{cleveref} % automatic references
@@ -87,7 +89,7 @@ For this the latest version of NS-3 was downloaded form \verb|https://www.nsmam.
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
-\section{NS3 Model} \label{sec:procedure}
+\section{NS-3 Model} \label{sec:procedure}
 NS-3 models are C++ based and consist out of network nodes, network devices, communication channels and applications.
 Most of the code is based on the second tutorial in the example folder.
 Listing \ref{lst:creation} shows the creation of the topology
@@ -208,17 +210,34 @@ The code was then compiled and execute with \verb|waf|. This created the ping me
 %6.) What do we need ARP for?
 %    -> to get the MAC address of a node in the same network. (only IP address is known) . No ARP in P2P because there is just one possible Receiver
 %8.) Why is checksum computation turned off by default in a ns-3 simulation? Is it a problem/does it make a difference to omit checksums? !! The checksum is disabled by default to let the simulations run faster./ There is no need for a checksum because there are no Errors !!
+The simulation delivered 45 ping measurements of which 44 had a Round Trip Time (RTT) of exact 163.779 ms. 
+Only the first message deviated from this value with a RRT of 178.881 ms. 
+This is because of the two initial ARP request and response messages which can be seen in the pcap files of node two and three.
+The Address Resolution Protocol (ARP) is used in IPv4 networks to obtain the MAC address of a node. 
+This is done by broadcasting a ARP request containing the IP address of the node. 
+If a node has this address, it answers with an ARP response containing its MAC address.
+In the beginning of the Simulation both nodes in the csma network need to obtain the MAC address of the other node to forward the ping message.
+This leads to a higher RTT in the first ping measurement because after the initial setup the MAC address is saved in the ARP table.
+In the P2P network ARP is not used because there is just one single communication partner and no need to obtain the MAC address.
 
-This chapter supports the understanding of the simulation model. Network model are been used to further estimate a real world scenario without a concrete build. Those models contains nodes and links just like a real internet system. For this problem we used NS-3 deploys a discrete-event simulator.
+After the initial set-up the RTT can be divided into the propagation delay ($ t_p $) of the link which is the time a packet needs to travel between nodes and the transmission delay ($ t_t $) which is the time it takes to transmit a packet from the host to the transmission medium.  It can be calculated with the number of bits to be sent ($n_{bit}$) and the bandwidth of the link ($b$): $ t_t = n_{bit}/b$
+\[t_p = 2\cdot(80 \si{\milli\second}+1 \si{\milli\second}) = 162 \si{\milli\second} \]
+\[t_t = 2\cdot(\frac{1054\cdot8}{\SI{11}{\mega\bit\per\second}} +\frac{1054\cdot8}{\SI{70}{\mega\bit\per\second}}) = 1.774\si{\milli\second} \]
+\[ RTT = t_p + t_t = 163.774 \]
 
-The assignment describes the needed network parameter like the network topology and the associated metrics. One task is to setup one point to point connection and also a CSMA link. those connections are implemented with \textbf{PointToPointHelper} and \textbf{CsmaHelper}. This classes are used to set up the IP addresses, MAC address and also channel delay. The channel delays, also propagation delays, is the time that it takes for a bit to reach from one end of a link to the other. The delay depends on the distance between the sender and the receiver, and the propagation speed of the wave signal.
+There are ohter delay types as well, like processing delay and queuing delay, but they are not considered in the simulation. 
+In reality the RTT is a bit different each time because of the changing network load, and there are sometimes lost packets,  but this behavior was not considered in this model.
+
+
 
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
 
 \section{Conclusion}
-
+NS-3 is a powerful tool to easily model different kind of networks. This is useful to test different set-ups or new protocols, but it has limits.
+Only the modeled behavior is simulated not more. 
+So simulation does not replace the use of the brain.
 
 
 %----------------------------------------------------------------------------------------
