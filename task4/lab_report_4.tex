@@ -62,7 +62,7 @@
 %----------------------------------------------------------------------------------------
 \section{Task description and setup} \label{sec:task}
 The task of the last assignment is to model a network in NS-3, which is an open source network simulator, according to the following network diagram (\cref{fig:2a}).
-Furthermore, a 10 seconds long simulation with a ping measurement from node 1 to node 3 shall be done and the generated measurement data discussed.
+Furthermore, a 10 seconds long simulation with a ping measurement from node 1 to node 3 shall be done and the generated measurement data be discussed.
 \begin{figure}[!h]
 	\centering
 	\begin{tikzpicture}[ >=stealth', auto, semithick, node distance=6cm]
@@ -92,8 +92,8 @@ For this the latest version of NS-3 was downloaded form \verb|https://www.nsmam.
 \section{NS-3 Model} \label{sec:procedure}
 NS-3 models are C++ based and consist out of network nodes, network devices, communication channels and applications.
 Most of the code is based on the second tutorial in the example folder.
-Listing \ref{lst:creation} shows the creation of the topology
-Because our system consists out of one PointToPoint connection and one Carrier Sense Multiple Access (CSMA) network, different kind of nodes were created and the given channel attributes were set by using the helper objects.
+Listing \ref{lst:creation} shows the creation of the topology.
+Because our system consists of one PointToPoint connection and one Carrier Sense Multiple Access (CSMA) network, different kind of nodes were created and the given channel attributes were set by using the helper objects.
 To finish the topology creation helper objects were used to install the network devices and a IP stack for every node.
 
 \begin{lstlisting}[language=c++, frame=single, captionpos=b, caption={Topology creation}, label=lst:creation]
@@ -223,8 +223,8 @@ In the P2P network ARP is not used because there is just one single communicatio
 
 After the initial set-up the RTT can be divided into the propagation delay ($ t_p $) of the link which is the time a packet needs to travel between nodes and the transmission delay ($ t_t $) which is the time it takes to transmit a packet from the host to the transmission medium.  It can be calculated with the number of bits to be sent ($n_{bit}$) and the bandwidth of the link ($b$): $ t_t = n_{bit}/b$
 \[t_p = 2\cdot(80 \si{\milli\second}+1 \si{\milli\second}) = 162 \si{\milli\second} \]
-\[t_t = 2\cdot(\frac{1054\cdot8}{\SI{11}{\mega\bit\per\second}} +\frac{1054\cdot8}{\SI{70}{\mega\bit\per\second}}) = 1.774\si{\milli\second} \]
-\[ RTT = t_p + t_t = 163.774 \]
+\[t_t = 2\cdot(\frac{1054\cdot8}{\SI{11}{\mega\bit\per\second}} +\frac{1054\cdot8}{\SI{70}{\mega\bit\per\second}}) = 1.774 \si{\milli\second} \]
+\[ RTT = t_p + t_t = 163.774 \si{\milli\second} \]
 
 There are other delay types as well, like processing delay and queuing delay, but they are not considered in the simulation. 
 In reality the RTT is a bit different each time because of the changing network load, and there are sometimes lost packets,  but this behavior was not considered in this model.
@@ -240,9 +240,8 @@ There is no need for checksums anyhow because no error behavior like flipping bi
 %----------------------------------------------------------------------------------------
 
 \section{Conclusion}
-NS-3 is a powerful tool to easily model different kind of networks. This is useful to test different set-ups or new protocols, but it has limits.
-Only the modeled behavior is simulated not more. 
-So simulation does not replace the use of the brain.
+NS-3 is a powerful tool to easily model different network systems. This is useful to test different set-ups or new protocols, but it has limits.
+Only the modeled behavior is simulated not more. Therefore the designer should think about the system constraints and specifications and verify if the model matches the goal. So simulation does not replace the use of the brain.
 
 
 %----------------------------------------------------------------------------------------
