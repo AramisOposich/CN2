@@ -49,8 +49,8 @@
     {\large 
         \begin{tabular}{l c c}
             Name & Mat.Nummer \\ \hline
-            Paul Kloker & 12034928 \\
-            Juan Aramis Oposich & 11701238
+            Juan Aramis Oposich & 11701238\\
+            Paul Kloker & 12034928
         \end{tabular}
     }
     \\\vspace*{7cm}
@@ -61,7 +61,7 @@
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 \section{Task description and setup} \label{sec:task}
-The task of the last assignment is to model a network in NS-3, which is an open source network simulator, according to the following network diagram (\cref{fig:2a}).
+The task of the last assignment is to model a network in NS-3, which is an open source network simulator, according to the following network diagram (see \cref{fig:2a}).
 Furthermore, a 10 seconds long simulation with a ping measurement from node 1 to node 3 shall be done and the generated measurement data be discussed.
 \begin{figure}[!h]
 	\centering
@@ -129,7 +129,8 @@ stack.Install (p2pNodes.Get (1));
 stack.Install (csmaNodes);
 \end{lstlisting}
 
-
+In \cref{tab:Nodes} all nodes are listed with their IP address and the position in the NS-3 node container. 
+The order in which the nodes are created plays a role in the address assignment.
 \begin{table}[hb]
 	\centering
 	\begin{tabular}{lll}
@@ -146,7 +147,7 @@ stack.Install (csmaNodes);
 \end{table}
 \clearpage
 
-To create a routing table with the \verb|Ipv4GlobalRoutingHelper|, both subnets first got the right address space assigned to them (see \ref{lst:address}).
+To create a routing table with the \verb|Ipv4GlobalRoutingHelper|, both subnets first got the right address space assigned to them (see \cref{lst:address}).
 
 \begin{lstlisting}[language=c++, frame=single, captionpos=b, caption={IP address assignment and routing table creation}, label=lst:address]
 Ipv4AddressHelper address;
@@ -166,7 +167,7 @@ The attribute \verb|Verbose| was set to true to create a ping-style output.
 The payload was set to 1024 bytes and the interval between the ping messages to 0.2 Seconds.
 The last two lines of \cref{lst:ping} define how long the ping application will run during the simulation.
 
-\begin{lstlisting}[language=c++, frame=single , captionpos=b, label=lst:ping]
+\begin{lstlisting}[language=c++, frame=single , captionpos=b, caption={Ping set-up},label=lst:ping]
 V4PingHelper ping = V4PingHelper (
 csmaInterfaces.GetAddress (1));
 ping.SetAttribute ("Verbose", BooleanValue (true));
@@ -175,7 +176,6 @@ ping.SetAttribute ("Interval", TimeValue(Seconds(0.2)));
 ApplicationContainer apps = ping.Install (p2pNodes.Get (1));
 apps.Start (Seconds (1.0));
 apps.Stop (Seconds (10.0));
-}
 \end{lstlisting}
 
 Before the simulation was invoked the stop time was specified and packet capturing was enabled for all P2P and CSMA nodes (see \cref{lst:simulation}).
@@ -187,7 +187,6 @@ pointToPoint.EnablePcapAll ("assignment4", true);
 Simulator::Stop (Seconds (10.0));
 Simulator::Run ();
 Simulator::Destroy ();
-}
 \end{lstlisting}
 
 The code was then compiled and execute with \verb|waf|. This created the ping measurement and pcap data which will be discussed in the next section. 
@@ -222,6 +221,7 @@ This leads to a higher RTT in the first ping measurement because after the initi
 In the P2P network ARP is not used because there is just one single communication partner and no need to obtain the MAC address.
 
 After the initial set-up the RTT can be divided into the propagation delay ($ t_p $) of the link which is the time a packet needs to travel between nodes and the transmission delay ($ t_t $) which is the time it takes to transmit a packet from the host to the transmission medium.  It can be calculated with the number of bits to be sent ($n_{bit}$) and the bandwidth of the link ($b$): $ t_t = n_{bit}/b$
+
 \[t_p = 2\cdot(80 \si{\milli\second}+1 \si{\milli\second}) = 162 \si{\milli\second} \]
 \[t_t = 2\cdot(\frac{1054\cdot8}{\SI{11}{\mega\bit\per\second}} +\frac{1054\cdot8}{\SI{70}{\mega\bit\per\second}}) = 1.774 \si{\milli\second} \]
 \[ RTT = t_p + t_t = 163.774 \si{\milli\second} \]
@@ -229,7 +229,7 @@ After the initial set-up the RTT can be divided into the propagation delay ($ t_
 There are other delay types as well, like processing delay and queuing delay, but they are not considered in the simulation. 
 In reality the RTT is a bit different each time because of the changing network load, and there are sometimes lost packets,  but this behavior was not considered in this model.
 
-While analysing the pcap files with WireShark, it was noticed that the checksums in the IP and ICMP header were not calculated and were always zero. 
+While analyzing the pcap files with WireShark, it was noticed that the checksums in the IP and ICMP header were not calculated and were always zero. 
 This is due to the fact that NS-3 disables the calculation of the checksum by default, as this would slow down the simulation.
 Normally the calculation is done with hardware support which speeds up the calculation in reality. 
 There is no need for checksums anyhow because no error behavior like flipping bits was modeled.
@@ -241,7 +241,7 @@ There is no need for checksums anyhow because no error behavior like flipping bi
 
 \section{Conclusion}
 NS-3 is a powerful tool to easily model different network systems. This is useful to test different set-ups or new protocols, but it has limits.
-Only the modeled behavior is simulated not more. Therefore the designer should think about the system constraints and specifications and verify if the model matches the goal. So simulation does not replace the use of the brain.
+Only the modeled behavior is simulated not more. Therefore, the designer should think about the system constraints and specifications and verify if the model matches the goal. So simulation does not replace the use of the brain.
 
 
 %----------------------------------------------------------------------------------------
